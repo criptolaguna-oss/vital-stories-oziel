@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "stories": "Historias",
+    "share": "Comparte tu historia",
+    "language": "EN"
+  },
+  "hero": {
+    "title": "Historias Reales de Transformación",
+    "subtitle": "Descubre cómo productos de VitalHealth están cambiando vidas. Testimonios reales, resultados reales.",
+    "cta": "Descubre las historias",
+    "scrollHint": "Desliza para explorar"
+  },
+  "stats": {
+    "stories": "Historias verificadas",
+    "clients": "Clientes transformados",
+    "products": "Productos con resultados"
+  },
+  "filters": {
+    "all": "Todos",
+    "products": "Productos",
+    "results": "Resultados",
+    "types": "Tipo",
+    "photo": "Foto",
+    "video": "Video",
+    "written": "Historia"
+  },
+  "categories": {
+    "awaken": "Awaken",
+    "detox": "Detox",
+    "nourish": "Nourish",
+    "restore": "Restore",
+    "kids": "Kids"
+  },
+  "tags": {
+    "energy": "Energía",
+    "weight": "Control de peso",
+    "wellness": "Bienestar",
+    "sleep": "Sueño",
+    "immunity": "Inmunidad"
+  },
+  "featured": {
+    "badge": "Historia del mes",
+    "viewFull": "Ver historia completa"
+  },
+  "testimonial": {
+    "viewStory": "Ver historia",
+    "monthsAsClient": "{months} meses",
+    "client": "Cliente"
+  },
+  "quotes": {
+    "title": "Lo que dicen nuestros clientes"
+  },
+  "cta": {
+    "title": "¿Tienes una historia que contar?",
+    "subtitle": "Tu experiencia puede inspirar a otros. Compártenos cómo VitalHealth transformó tu vida.",
+    "button": "Comparte tu historia",
+    "whatsapp": "Escríbenos por WhatsApp"
+  },
+  "footer": {
+    "rights": "© 2026 VitalStories. Todos los derechos reservados.",
+    "powered": "Distribuidor autorizado VitalHealth"
+  },
+  "admin": {
+    "login": "Iniciar sesión",
+    "username": "Usuario",
+    "password": "Contraseña",
+    "dashboard": "Panel de administración",
+    "stories": "Historias",
+    "published": "Publicadas",
+    "videos": "Videos",
+    "pending": "Pendientes",
+    "new": "Nueva historia",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "multimedia": "Multimedia",
+    "settings": "Ajustes",
+    "name": "Nombre del cliente",
+    "testimonialTitle": "Título del testimonio",
+    "body": "Testimonio",
+    "category": "Categoría (Producto)",
+    "tags": "Etiquetas de resultado",
+    "months": "Meses como cliente",
+    "type": "Tipo",
+    "imageUrl": "URL de imagen",
+    "videoUrl": "URL de video",
+    "status": "Estado",
+    "statusPublished": "Publicado",
+    "statusDraft": "Borrador",
+    "featured": "Historia destacada",
+    "translationEN": "Traducción al inglés",
+    "logout": "Cerrar sesión",
+    "confirmDelete": "¿Eliminar este testimonio?",
+    "saved": "Testimonio guardado",
+    "deleted": "Testimonio eliminado",
+    "search": "Buscar testimonios..."
+  }
+}

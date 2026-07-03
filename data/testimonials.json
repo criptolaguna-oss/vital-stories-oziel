@@ -1,0 +1,203 @@
+[
+  {
+    "id": "1782763902047",
+    "name": "luis sanchez ",
+    "title_es": "cambio en un momento",
+    "title_en": "",
+    "body_es": "gracias por el cambio",
+    "body_en": "",
+    "type": "video",
+    "imageUrl": "/uploads/1782763864027-228m18.jpg",
+    "videoUrl": "\"C:\\Users\\Luis F. Sanchez\\Downloads\\hf_20260617_213551_23af91da-6bc1-47ec-8b39-3ca0a9050d36.mp4\"",
+    "category": "detox",
+    "tags": [
+      "wellness"
+    ],
+    "monthsAsClient": 1,
+    "featured": false,
+    "status": "published",
+    "createdAt": "2026-06-29T20:11:42.047Z"
+  },
+  {
+    "id": "1782763787746",
+    "name": "luis sanchez ",
+    "title_es": "un cambio por una decisión ",
+    "title_en": "",
+    "body_es": "gracias a una toda de una decision cambio mi vida graacias a vital health",
+    "body_en": "",
+    "type": "video",
+    "imageUrl": "/uploads/1782763784239-v3bxf.jpg",
+    "videoUrl": "",
+    "category": "detox",
+    "tags": [
+      "wellness"
+    ],
+    "monthsAsClient": 1,
+    "featured": false,
+    "status": "published",
+    "createdAt": "2026-06-29T20:09:47.746Z"
+  },
+  {
+    "id": "1",
+    "name": "María González",
+    "title_es": "Cómo recuperé mi energía y mi confianza",
+    "title_en": "How I recovered my energy and confidence",
+    "body_es": "Cuando empecé no tenía muchas expectativas. Llevaba años con poca energía y dificultad para mantener un peso saludable. A las pocas semanas empecé a notar el cambio: dormía mejor y me levantaba con ánimo. Hoy comparto mi historia para que otros sepan que sí es posible.",
+    "body_en": "When I started I didn't have many expectations. I'd spent years with low energy and difficulty maintaining a healthy weight. Within a few weeks I started noticing the change: I slept better and woke up with energy. Today I share my story so others know it is possible.",
+    "type": "video",
+    "imageUrl": "",
+    "videoUrl": "",
+    "category": "nourish",
+    "tags": [
+      "energy",
+      "weight",
+      "wellness"
+    ],
+    "monthsAsClient": 8,
+    "featured": true,
+    "status": "published",
+    "createdAt": "2026-03-15T10:00:00Z"
+  },
+  {
+    "id": "2",
+    "name": "Ana López",
+    "title_es": "Bajé 12 kg en 4 meses",
+    "title_en": "I lost 12 kg in 4 months",
+    "body_es": "Gracias a los productos de VitalHealth y al acompañamiento constante, logré un cambio que no pensaba era posible. Mi calidad de vida mejoró completamente.",
+    "body_en": "Thanks to VitalHealth products and constant support, I achieved a change I didn't think was possible. My quality of life improved completely.",
+    "type": "photo",
+    "imageUrl": "",
+    "videoUrl": "",
+    "category": "detox",
+    "tags": [
+      "weight",
+      "wellness"
+    ],
+    "monthsAsClient": 4,
+    "featured": false,
+    "status": "published",
+    "createdAt": "2026-02-20T14:00:00Z"
+  },
+  {
+    "id": "3",
+    "name": "Jorge Martínez",
+    "title_es": "Mi día a día cambió por completo",
+    "title_en": "My day-to-day changed completely",
+    "body_es": "Desde que incluí los adaptógenos de Awaken en mi rutina, mi productividad subió y el estrés bajó. Es increíble lo que puede hacer una nutrición adecuada.",
+    "body_en": "Since I included Awaken adaptogens in my routine, my productivity went up and stress went down. It's amazing what proper nutrition can do.",
+    "type": "video",
+    "imageUrl": "",
+    "videoUrl": "",
+    "category": "awaken",
+    "tags": [
+      "energy",
+      "wellness"
+    ],
+    "monthsAsClient": 6,
+    "featured": false,
+    "status": "published",
+    "createdAt": "2026-01-10T09:00:00Z"
+  },
+  {
+    "id": "4",
+    "name": "Carlos Ramírez",
+    "title_es": "El acompañamiento marcó la diferencia",
+    "title_en": "The support made all the difference",
+    "body_es": "Lo que más valoro es el acompañamiento personalizado. No solo venden productos, te enseñan a cambiar tu estilo de vida de raíz.",
+    "body_en": "What I value most is the personalized support. They don't just sell products, they teach you to change your lifestyle from the root.",
+    "type": "photo",
+    "imageUrl": "",
+    "videoUrl": "",
+    "category": "restore",
+    "tags": [
+      "wellness",
+      "immunity"
+    ],
+    "monthsAsClient": 10,
+    "featured": false,
+    "status": "published",
+    "createdAt": "2025-12-05T11:00:00Z"
+  },
+  {
+    "id": "5",
+    "name": "Sofía Rodríguez",
+    "title_es": "6 meses de cambio total",
+    "title_en": "6 months of total change",
+    "body_es": "Empecé con Detox y luego incorporé Nourish. La combinación fue perfecta. Mi piel, mi energía, mi sueño... todo mejoró.",
+    "body_en": "I started with Detox and then incorporated Nourish. The combination was perfect. My skin, my energy, my sleep... everything improved.",
+    "type": "written",
+    "imageUrl": "",
+    "videoUrl": "",
+    "category": "detox",
+    "tags": [
+      "energy",
+      "sleep",
+      "wellness"
+    ],
+    "monthsAsClient": 6,
+    "featured": false,
+    "status": "published",
+    "createdAt": "2025-11-20T16:00:00Z"
+  },
+  {
+    "id": "6",
+    "name": "Roberto Silva",
+    "title_es": "Mi sistema inmune nunca fue tan fuerte",
+    "title_en": "My immune system was never this strong",
+    "body_es": "Desde que uso Restore, no me he enfermado una sola vez. Mis análisis médicos mejoraron notablemente.",
+    "body_en": "Since using Restore, I haven't gotten sick once. My lab results improved significantly.",
+    "type": "photo",
+    "imageUrl": "",
+    "videoUrl": "",
+    "category": "restore",
+    "tags": [
+      "immunity",
+      "wellness"
+    ],
+    "monthsAsClient": 12,
+    "featured": false,
+    "status": "published",
+    "createdAt": "2025-10-15T08:00:00Z"
+  },
+  {
+    "id": "7",
+    "name": "Laura Mendoza",
+    "title_es": "Mis hijos ya no se enferman cada mes",
+    "title_en": "My kids no longer get sick every month",
+    "body_es": "Gracias a la línea Kids de VitalHealth, la salud de mis hijos dio un giro de 180 grados. Estoy muy agradecida.",
+    "body_en": "Thanks to the Kids line from VitalHealth, my children's health took a 180 degree turn. I'm very grateful.",
+    "type": "video",
+    "imageUrl": "",
+    "videoUrl": "",
+    "category": "kids",
+    "tags": [
+      "immunity",
+      "wellness"
+    ],
+    "monthsAsClient": 9,
+    "featured": false,
+    "status": "published",
+    "createdAt": "2025-09-10T13:00:00Z"
+  },
+  {
+    "id": "8",
+    "name": "Fernando Torres",
+    "title_es": "Dormir 8 horas era un lujo, ahora es mi normalidad",
+    "title_en": "Sleeping 8 hours was a luxury, now it's my normal",
+    "body_es": "Sufría de insomnio crónico. Después de 3 meses con los productos de VitalHealth, mi sueño se regularizó por completo.",
+    "body_en": "I suffered from chronic insomnia. After 3 months with VitalHealth products, my sleep completely regularized.",
+    "type": "written",
+    "imageUrl": "",
+    "videoUrl": "",
+    "category": "awaken",
+    "tags": [
+      "sleep",
+      "wellness",
+      "energy"
+    ],
+    "monthsAsClient": 3,
+    "featured": false,
+    "status": "published",
+    "createdAt": "2026-04-01T10:00:00Z"
+  }
+]

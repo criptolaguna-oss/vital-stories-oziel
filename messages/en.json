@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "home": "Home",
+    "stories": "Stories",
+    "share": "Share your story",
+    "language": "ES"
+  },
+  "hero": {
+    "title": "Real Stories of Transformation",
+    "subtitle": "Discover how VitalHealth products are changing lives. Real testimonials, real results.",
+    "cta": "Discover the stories",
+    "scrollHint": "Scroll to explore"
+  },
+  "stats": {
+    "stories": "Verified stories",
+    "clients": "Transformed clients",
+    "products": "Products with results"
+  },
+  "filters": {
+    "all": "All",
+    "products": "Products",
+    "results": "Results",
+    "types": "Type",
+    "photo": "Photo",
+    "video": "Video",
+    "written": "Story"
+  },
+  "categories": {
+    "awaken": "Awaken",
+    "detox": "Detox",
+    "nourish": "Nourish",
+    "restore": "Restore",
+    "kids": "Kids"
+  },
+  "tags": {
+    "energy": "Energy",
+    "weight": "Weight control",
+    "wellness": "Wellness",
+    "sleep": "Sleep",
+    "immunity": "Immunity"
+  },
+  "featured": {
+    "badge": "Story of the month",
+    "viewFull": "View full story"
+  },
+  "testimonial": {
+    "viewStory": "View story",
+    "monthsAsClient": "{months} months",
+    "client": "Client"
+  },
+  "quotes": {
+    "title": "What our clients say"
+  },
+  "cta": {
+    "title": "Do you have a story to tell?",
+    "subtitle": "Your experience can inspire others. Share with us how VitalHealth transformed your life.",
+    "button": "Share your story",
+    "whatsapp": "Write us on WhatsApp"
+  },
+  "footer": {
+    "rights": "© 2026 VitalStories. All rights reserved.",
+    "powered": "Authorized VitalHealth Distributor"
+  },
+  "admin": {
+    "login": "Log in",
+    "username": "Username",
+    "password": "Password",
+    "dashboard": "Admin dashboard",
+    "stories": "Stories",
+    "published": "Published",
+    "videos": "Videos",
+    "pending": "Pending",
+    "new": "New story",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "multimedia": "Multimedia",
+    "settings": "Settings",
+    "name": "Client name",
+    "testimonialTitle": "Testimonial title",
+    "body": "Testimonial",
+    "category": "Category (Product)",
+    "tags": "Result tags",
+    "months": "Months as client",
+    "type": "Type",
+    "imageUrl": "Image URL",
+    "videoUrl": "Video URL",
+    "status": "Status",
+    "statusPublished": "Published",
+    "statusDraft": "Draft",
+    "featured": "Featured story",
+    "translationEN": "English translation",
+    "logout": "Log out",
+    "confirmDelete": "Delete this testimonial?",
+    "saved": "Testimonial saved",
+    "deleted": "Testimonial deleted",
+    "search": "Search testimonials..."
+  }
+}
