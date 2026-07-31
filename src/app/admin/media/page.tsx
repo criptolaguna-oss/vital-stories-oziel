@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import AdminShell from '@/components/admin/AdminShell';
 
 interface MediaItem {
@@ -15,12 +14,10 @@ export default function MediaPage() {
   const [items, setItems] = useState<MediaItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
-  const router = useRouter();
 
   const loadMedia = async () => {
     try {
       const res = await fetch('/api/media');
-      if (res.status === 401) { router.push('/admin/login'); return; }
       const data = await res.json();
       setItems(data.items || []);
     } catch {

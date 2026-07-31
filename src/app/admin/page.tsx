@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import AdminShell from '@/components/admin/AdminShell';
 
@@ -51,20 +50,16 @@ function DashboardContent() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'published' | 'draft'>('all');
   const [search, setSearch] = useState('');
-  const router = useRouter();
 
   useEffect(() => {
     fetch('/api/testimonials')
-      .then((r) => {
-        if (r.status === 401) { router.push('/admin/login'); return null; }
-        return r.json();
-      })
+      .then((r) => r.json())
       .then((data) => {
         if (Array.isArray(data)) setTestimonials(data);
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [router]);
+  }, []);
 
   const handleDelete = async (id: string) => {
     if (!confirm('¿Eliminar este testimonio?')) return;

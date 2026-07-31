@@ -1,21 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import AdminShell from '@/components/admin/AdminShell';
 import TestimonialForm from '@/components/admin/TestimonialForm';
 
 export default function EditTestimonialPage({ params }: { params: { id: string } }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     fetch('/api/testimonials')
-      .then((r) => {
-        if (r.status === 401) { router.push('/admin/login'); return null; }
-        return r.json();
-      })
+      .then((r) => r.json())
       .then((all) => {
         if (Array.isArray(all)) {
           const found = all.find((t: any) => t.id === params.id);
@@ -24,7 +19,7 @@ export default function EditTestimonialPage({ params }: { params: { id: string }
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [params.id, router]);
+  }, [params.id]);
 
   return (
     <AdminShell>

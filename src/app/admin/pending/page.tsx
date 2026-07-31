@@ -2,27 +2,22 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import AdminShell from '@/components/admin/AdminShell';
 
 export default function PendingPage() {
   const [testimonials, setTestimonials] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     fetch('/api/testimonials')
-      .then((r) => {
-        if (r.status === 401) { router.push('/admin/login'); return null; }
-        return r.json();
-      })
+      .then((r) => r.json())
       .then((data) => {
         if (Array.isArray(data)) setTestimonials(data.filter((t) => t.status === 'draft'));
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [router]);
+  }, []);
 
   const publish = async (id: string) => {
     const res = await fetch(`/api/testimonials/${id}`, {

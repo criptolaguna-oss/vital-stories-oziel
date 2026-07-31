@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,6 +16,9 @@ const navItems = [
   { href: '/admin/media', label: 'Multimedia', icon: 'photo' },
   { href: '/admin/settings', label: 'Ajustes', icon: 'settings' },
 ];
+
+// Cache simple en memoria para el conteo de pendientes (evita recargar)
+let pendingCountCache: number | null = null;
 
 function NavIcon({ name }: { name: string }) {
   const icons: Record<string, JSX.Element> = {
@@ -63,44 +66,79 @@ function NavIcon({ name }: { name: string }) {
 export default function AdminShell({ children }: AdminShellProps) {
   const [authed, setAuthed] = useState<boolean | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [pendingCount, setPendingCount] = useState(0);
+  const [pendingCount, setPendingCount] = useState(pendingCountCache || 0);
   const router = useRouter();
   const pathname = usePathname();
 
+  // Verificación de auth: SOLO una vez al montar, endpoint ligero (sin BD)
   useEffect(() => {
-    // Verificar auth con el endpoint
-    fetch('/api/testimonials')
-      .then((res) => {
-        if (res.status === 401) {
+    let cancelled = false;
+    fetch('/api/auth/check')
+      .then((r) => r.json())
+      .then((data) => {
+        if (cancelled) return;
+        if (!data.authenticated) {
           router.push('/admin/login');
         } else {
           setAuthed(true);
         }
       })
-      .catch(() => router.push('/admin/login'));
+      .catch(() => {
+        if (!cancelled) router.push('/admin/login');
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [router]);
 
+  // Conteo de pendientes: una sola vez (cacheado en memoria del navegador)
   useEffect(() => {
-    if (!authed) return;
+    if (!authed || pendingCountCache !== null) return;
     fetch('/api/testimonials')
       .then((r) => r.json())
       .then((data) => {
         if (Array.isArray(data)) {
-          setPendingCount(data.filter((t: any) => t.status === 'draft').length);
+          const count = data.filter((t: any) => t.status === 'draft').length;
+          pendingCountCache = count;
+          setPendingCount(count);
         }
       })
       .catch(() => {});
-  }, [authed, pathname]);
+  }, [authed]);
+
+  // Invalidar cache de pendientes cuando se navega a estas páginas
+  useEffect(() => {
+    if (pathname === '/admin' || pathname === '/admin/pending' || pathname === '/admin/new') {
+      pendingCountCache = null;
+      // Recargar conteo silenciosamente
+      if (authed) {
+        fetch('/api/testimonials')
+          .then((r) => r.json())
+          .then((data) => {
+            if (Array.isArray(data)) {
+              const count = data.filter((t: any) => t.status === 'draft').length;
+              pendingCountCache = count;
+              setPendingCount(count);
+            }
+          })
+          .catch(() => {});
+      }
+    }
+  }, [pathname, authed]);
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
+    pendingCountCache = null;
     router.push('/admin/login');
   };
 
   if (authed === null) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-vital-text-muted">Verificando acceso...</div>
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-vital-green/30 border-t-vital-green rounded-full animate-spin" />
+          <div className="text-vital-text-muted text-sm">Verificando acceso...</div>
+        </div>
       </div>
     );
   }
@@ -110,14 +148,17 @@ export default function AdminShell({ children }: AdminShellProps) {
   return (
     <div className="min-h-screen flex bg-vital-dark">
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex w-60 bg-[#0a0d0b] border-r border-white/[0.06] flex-col">
+      <aside className="hidden md:flex w-60 bg-[#0a0d0b] border-r border-white/[0.06] flex-col shrink-0">
         <div className="p-5 flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-vital-green to-vital-green-dark flex items-center justify-center">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0a0d0b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
           </div>
-          <span className="text-vital-text font-medium text-sm">Panel</span>
+          <div>
+            <span className="text-vital-text font-medium text-sm block leading-tight">tu<span className="text-vital-green">networker</span></span>
+            <span className="text-vital-text-muted text-[10px]">stories admin</span>
+          </div>
         </div>
 
         <nav className="flex-1 px-3 py-2 space-y-1">
@@ -127,6 +168,7 @@ export default function AdminShell({ children }: AdminShellProps) {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch
                 className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm transition-all ${
                   isActive
                     ? 'bg-gradient-to-r from-vital-green/20 to-vital-green-dark/10 text-vital-green font-medium'
@@ -173,7 +215,7 @@ export default function AdminShell({ children }: AdminShellProps) {
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
           </div>
-          <span className="text-vital-text font-medium text-sm">Panel</span>
+          <span className="text-vital-text font-medium text-sm">tu<span className="text-vital-green">networker</span></span>
         </div>
         <button onClick={() => setMobileOpen(!mobileOpen)} className="text-vital-text p-1">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
