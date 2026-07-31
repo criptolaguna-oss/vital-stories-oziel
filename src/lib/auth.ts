@@ -1,9 +1,14 @@
-// Sistema simple de autenticación basado en cookies para el panel admin
-// En producción usar variables de entorno con clave fuerte
+// Sistema de autenticación basado en cookies para el panel admin
+// Credenciales por defecto SIEMPRE disponibles (oziel / vital2026)
 
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'oziel';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'vital2026';
-const SESSION_SECRET = process.env.SESSION_SECRET || 'vital-stories-secret-key-2026';
+const DEFAULT_USERNAME = 'oziel';
+const DEFAULT_PASSWORD = 'vital2026';
+const DEFAULT_SECRET = 'vital-stories-oziel-default-secret-2026';
+
+// Las variables de entorno pueden sobreescribir en producción (opcional)
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || DEFAULT_USERNAME;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || DEFAULT_PASSWORD;
+const SESSION_SECRET = process.env.SESSION_SECRET || DEFAULT_SECRET;
 
 // Codificación/decodificación Base64URL
 function b64urlEncode(str: string): string {
@@ -16,7 +21,7 @@ function b64urlDecode(str: string): string {
   return Buffer.from(s, 'base64').toString('utf-8');
 }
 
-// HMAC-SHA256 simple usando Node.js crypto
+// HMAC-SHA256 usando Node.js crypto
 import crypto from 'crypto';
 
 function sign(payload: string, secret: string): string {
@@ -46,5 +51,8 @@ export function verifyToken(token: string): boolean {
 }
 
 export function validateCredentials(username: string, password: string): boolean {
-  return username === ADMIN_USERNAME && password === ADMIN_PASSWORD;
+  // Aceptar credenciales por defecto O las de variables de entorno
+  const isDefault = username === DEFAULT_USERNAME && password === DEFAULT_PASSWORD;
+  const isEnv = username === ADMIN_USERNAME && password === ADMIN_PASSWORD;
+  return isDefault || isEnv;
 }
