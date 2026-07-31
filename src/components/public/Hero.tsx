@@ -172,7 +172,7 @@ export default function Hero({ t }: HeroProps) {
         >
           <div className="w-2 h-2 rounded-full bg-vital-green animate-pulse" />
           <span className="text-vital-green text-xs font-medium tracking-wider uppercase">
-            VitalHealth Distributor
+            Distribuidor Independiente VitalHealth
           </span>
         </motion.div>
 

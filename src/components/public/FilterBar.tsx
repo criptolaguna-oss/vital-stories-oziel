@@ -1,10 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
-
 interface FilterBarProps {
-  activeCategory: string;
-  setActiveCategory: (c: string) => void;
   activeTag: string;
   setActiveTag: (t: string) => void;
   activeType: string;
@@ -12,14 +8,9 @@ interface FilterBarProps {
   t: (key: string) => string;
 }
 
-const categories = ['all', 'awaken', 'detox', 'nourish', 'restore', 'kids'];
 const tags = ['all', 'energy', 'weight', 'wellness', 'sleep', 'immunity'];
 const types = ['all', 'photo', 'video', 'written'];
 
-const categoryLabels: Record<string, Record<string, string>> = {
-  es: { all: 'Todos', awaken: 'Awaken', detox: 'Detox', nourish: 'Nourish', restore: 'Restore', kids: 'Kids' },
-  en: { all: 'All', awaken: 'Awaken', detox: 'Detox', nourish: 'Nourish', restore: 'Restore', kids: 'Kids' },
-};
 const tagLabels: Record<string, Record<string, string>> = {
   es: { all: 'Todos', energy: 'Energía', weight: 'Peso', wellness: 'Bienestar', sleep: 'Sueño', immunity: 'Inmunidad' },
   en: { all: 'All', energy: 'Energy', weight: 'Weight', wellness: 'Wellness', sleep: 'Sleep', immunity: 'Immunity' },
@@ -29,8 +20,7 @@ const typeLabels: Record<string, Record<string, string>> = {
   en: { all: 'All', photo: 'Photos', video: 'Videos', written: 'Stories' },
 };
 
-export default function FilterBar({ activeCategory, setActiveCategory, activeTag, setActiveTag, activeType, setActiveType, t }: FilterBarProps) {
-  // We determine locale from the tag labels to keep it simple
+export default function FilterBar({ activeTag, setActiveTag, activeType, setActiveType, t }: FilterBarProps) {
   const locale = t('filters.all') === 'All' ? 'en' : 'es';
 
   const renderPills = (items: string[], active: string, setActive: (v: string) => void, labels: Record<string, string>) => (
@@ -54,12 +44,6 @@ export default function FilterBar({ activeCategory, setActiveCategory, activeTag
   return (
     <section className="sticky top-0 z-40 py-4 px-6 glass" id="gallery">
       <div className="max-w-6xl mx-auto space-y-3">
-        {/* Products row */}
-        <div className="flex items-center gap-3">
-          <span className="text-vital-text-muted text-xs font-medium uppercase tracking-wider w-24 shrink-0 hidden sm:block">{t('filters.products')}</span>
-          {renderPills(categories, activeCategory, setActiveCategory, categoryLabels[locale])}
-        </div>
-
         {/* Tags row */}
         <div className="flex items-center gap-3">
           <span className="text-vital-text-muted text-xs font-medium uppercase tracking-wider w-24 shrink-0 hidden sm:block">{t('filters.results')}</span>

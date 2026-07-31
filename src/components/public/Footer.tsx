@@ -18,7 +18,7 @@ export default function Footer({ t }: FooterProps) {
             </div>
             <div>
               <p className="text-vital-text font-medium text-sm">
-                Vital<span className="text-vital-green">Stories</span>
+                tu<span className="text-vital-green">networker</span> stories
               </p>
               <p className="text-vital-text-muted text-xs">{t('footer.powered')}</p>
             </div>

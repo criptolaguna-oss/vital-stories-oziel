@@ -61,7 +61,7 @@ export default function LoginPage() {
                 </svg>
               </div>
             </div>
-            <h1 className="text-2xl font-serif text-vital-text font-medium">VitalStories</h1>
+            <h1 className="text-2xl font-serif text-vital-text font-medium">tu<span className="text-vital-green">networker</span></h1>
             <p className="text-vital-text-muted text-sm mt-1">Panel de administración</p>
           </div>
 

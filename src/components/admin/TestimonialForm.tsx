@@ -10,14 +10,6 @@ interface TestimonialFormProps {
   mode: 'create' | 'edit';
 }
 
-const categories = [
-  { value: 'awaken', label: 'Awaken' },
-  { value: 'detox', label: 'Detox' },
-  { value: 'nourish', label: 'Nourish' },
-  { value: 'restore', label: 'Restore' },
-  { value: 'kids', label: 'Kids' },
-];
-
 const allTags = ['energy', 'weight', 'wellness', 'sleep', 'immunity'];
 const tagLabels: Record<string, string> = {
   energy: '⚡ Energía',
@@ -43,7 +35,6 @@ export default function TestimonialForm({ initial, mode }: TestimonialFormProps)
     type: initial?.type || 'written',
     imageUrl: initial?.imageUrl || '',
     videoUrl: initial?.videoUrl || '',
-    category: initial?.category || 'nourish',
     tags: initial?.tags || [],
     monthsAsClient: initial?.monthsAsClient || 1,
     featured: initial?.featured || false,
@@ -199,20 +190,6 @@ export default function TestimonialForm({ initial, mode }: TestimonialFormProps)
               <option value="written">📝 Historia escrita</option>
               <option value="photo">📷 Foto</option>
               <option value="video">🎬 Video</option>
-            </select>
-          </div>
-
-          {/* Categoría */}
-          <div>
-            <label className="block text-vital-text-secondary text-xs font-medium mb-2 uppercase tracking-wider">Producto</label>
-            <select
-              value={form.category}
-              onChange={(e) => update('category', e.target.value)}
-              className="admin-input w-full"
-            >
-              {categories.map((c) => (
-                <option key={c.value} value={c.value}>{c.label}</option>
-              ))}
             </select>
           </div>
 

@@ -41,7 +41,7 @@ export default function Navbar({ locale, setLocale, t }: NavbarProps) {
             </svg>
           </div>
           <span className="text-vital-text font-medium text-lg tracking-tight">
-            Vital<span className="text-vital-green">Stories</span>
+            tu<span className="text-vital-green">networker</span> stories
           </span>
         </a>
 

@@ -36,7 +36,6 @@ interface Testimonial {
 
 export default function Home() {
   const [locale, setLocale] = useState<'es' | 'en'>('es');
-  const [activeCategory, setActiveCategory] = useState('all');
   const [activeTag, setActiveTag] = useState('all');
   const [activeType, setActiveType] = useState('all');
   const [selectedTestimonial, setSelectedTestimonial] = useState<Testimonial | null>(null);
@@ -56,7 +55,7 @@ export default function Home() {
   const t = (key: string) => {
     const es: Record<string, string> = {
       'hero.title': 'Historias Reales de Transformación',
-      'hero.subtitle': 'Descubre cómo productos de VitalHealth están cambiando vidas. Testimonios reales, resultados reales.',
+      'hero.subtitle': 'Historias reales de personas que transformaron su vida. Testimonios reales, resultados reales.',
       'hero.cta': 'Descubre las historias',
       'hero.scrollHint': 'Desliza para explorar',
       'stats.stories': 'Historias verificadas',
@@ -73,18 +72,18 @@ export default function Home() {
       'featured.viewFull': 'Ver historia completa',
       'quotes.title': 'Lo que dicen nuestros clientes',
       'cta.title': '¿Tienes una historia que contar?',
-      'cta.subtitle': 'Tu experiencia puede inspirar a otros. Compártenos cómo VitalHealth transformó tu vida.',
+      'cta.subtitle': 'Tu experiencia puede inspirar a otros. Compártenos cómo transformaste tu vida.',
       'cta.button': 'Comparte tu historia',
       'testimonial.viewStory': 'Ver historia',
       'testimonial.client': 'Cliente',
-      'footer.rights': '© 2026 VitalStories. Todos los derechos reservados.',
-      'footer.powered': 'Distribuidor autorizado VitalHealth',
+      'footer.rights': '© 2026 tu networker stories. Todos los derechos reservados.',
+      'footer.powered': 'Distribuidor Independiente VitalHealth',
       'nav.language': 'EN',
       'nav.share': 'Comparte tu historia',
     };
     const en: Record<string, string> = {
       'hero.title': 'Real Stories of Transformation',
-      'hero.subtitle': 'Discover how VitalHealth products are changing lives. Real testimonials, real results.',
+      'hero.subtitle': 'Real stories of people who transformed their lives. Real testimonials, real results.',
       'hero.cta': 'Discover the stories',
       'hero.scrollHint': 'Scroll to explore',
       'stats.stories': 'Verified stories',
@@ -101,12 +100,12 @@ export default function Home() {
       'featured.viewFull': 'View full story',
       'quotes.title': 'What our clients say',
       'cta.title': 'Do you have a story to tell?',
-      'cta.subtitle': 'Your experience can inspire others. Share with us how VitalHealth transformed your life.',
+      'cta.subtitle': 'Your experience can inspire others. Share with us how you transformed your life.',
       'cta.button': 'Share your story',
       'testimonial.viewStory': 'View story',
       'testimonial.client': 'Client',
-      'footer.rights': '© 2026 VitalStories. All rights reserved.',
-      'footer.powered': 'Authorized VitalHealth Distributor',
+      'footer.rights': '© 2026 tu networker stories. All rights reserved.',
+      'footer.powered': 'Independent VitalHealth Distributor',
       'nav.language': 'ES',
       'nav.share': 'Share your story',
     };
@@ -119,7 +118,6 @@ export default function Home() {
 
   const filtered = testimonials.filter((t) => {
     if (t.status !== 'published') return false;
-    if (activeCategory !== 'all' && t.category !== activeCategory) return false;
     if (activeTag !== 'all' && !t.tags.includes(activeTag)) return false;
     if (activeType !== 'all' && t.type !== activeType) return false;
     return true;
@@ -139,8 +137,6 @@ export default function Home() {
       <StatsCounter testimonials={testimonials} t={t} />
 
       <FilterBar
-        activeCategory={activeCategory}
-        setActiveCategory={setActiveCategory}
         activeTag={activeTag}
         setActiveTag={setActiveTag}
         activeType={activeType}
