@@ -19,6 +19,46 @@ const tagLabels: Record<string, string> = {
   immunity: '🛡️ Inmunidad',
 };
 
+// Comprime una imagen en el navegador y la devuelve como base64
+// Esto funciona en cualquier host (incluso Vercel de solo lectura)
+function compressImage(file: File, maxSize: number, quality: number): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        // Mantener proporción, limitar el lado mayor
+        if (width > height && width > maxSize) {
+          height = (height * maxSize) / width;
+          width = maxSize;
+        } else if (height > maxSize) {
+          width = (width * maxSize) / height;
+          height = maxSize;
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject(new Error('No canvas context'));
+          return;
+        }
+        ctx.drawImage(img, 0, 0, width, height);
+        // Usar WebP si está disponible (más compresión), si no JPEG
+        const isPng = file.type === 'image/png';
+        const mimeType = isPng ? 'image/png' : 'image/jpeg';
+        const dataUrl = canvas.toDataURL(mimeType, quality);
+        resolve(dataUrl);
+      };
+      img.onerror = () => reject(new Error('No se pudo cargar la imagen'));
+      img.src = e.target?.result as string;
+    };
+    reader.onerror = () => reject(new Error('No se pudo leer el archivo'));
+    reader.readAsDataURL(file);
+  });
+}
+
 export default function TestimonialForm({ initial, mode }: TestimonialFormProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -54,20 +94,31 @@ export default function TestimonialForm({ initial, mode }: TestimonialFormProps)
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
+    setMessage('');
     try {
-      const fd = new FormData();
-      fd.append('file', file);
-      const res = await fetch('/api/upload', { method: 'POST', body: fd });
-      const data = await res.json();
-      if (res.ok && data.url) {
-        update('imageUrl', data.url);
+      // Si es video, intentar subir al servidor/Supabase
+      if (file.type.startsWith('video/')) {
+        const fd = new FormData();
+        fd.append('file', file);
+        const res = await fetch('/api/upload', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (res.ok && data.url) {
+          update('imageUrl', data.url);
+        } else {
+          setMessage(data.error || 'No se pudo subir el video (requiere Supabase configurado)');
+        }
       } else {
-        setMessage(data.error || 'Error al subir');
+        // Imagen: comprimir en el navegador y guardar como base64
+        // (funciona en cualquier host, incluso Vercel de solo lectura)
+        const compressed = await compressImage(file, 1200, 0.8);
+        update('imageUrl', compressed);
       }
-    } catch {
-      setMessage('Error de conexión');
+    } catch (err) {
+      setMessage('Error al procesar la imagen');
     }
     setUploading(false);
+    // Limpiar input para poder subir la misma imagen otra vez
+    if (e.target) e.target.value = '';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
