@@ -19,46 +19,6 @@ const tagLabels: Record<string, string> = {
   immunity: '🛡️ Inmunidad',
 };
 
-// Comprime una imagen en el navegador y la devuelve como base64
-// Esto funciona en cualquier host (incluso Vercel de solo lectura)
-function compressImage(file: File, maxSize: number, quality: number): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        let { width, height } = img;
-        // Mantener proporción, limitar el lado mayor
-        if (width > height && width > maxSize) {
-          height = (height * maxSize) / width;
-          width = maxSize;
-        } else if (height > maxSize) {
-          width = (width * maxSize) / height;
-          height = maxSize;
-        }
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
-          reject(new Error('No canvas context'));
-          return;
-        }
-        ctx.drawImage(img, 0, 0, width, height);
-        // Usar WebP si está disponible (más compresión), si no JPEG
-        const isPng = file.type === 'image/png';
-        const mimeType = isPng ? 'image/png' : 'image/jpeg';
-        const dataUrl = canvas.toDataURL(mimeType, quality);
-        resolve(dataUrl);
-      };
-      img.onerror = () => reject(new Error('No se pudo cargar la imagen'));
-      img.src = e.target?.result as string;
-    };
-    reader.onerror = () => reject(new Error('No se pudo leer el archivo'));
-    reader.readAsDataURL(file);
-  });
-}
-
 export default function TestimonialForm({ initial, mode }: TestimonialFormProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -95,29 +55,37 @@ export default function TestimonialForm({ initial, mode }: TestimonialFormProps)
     if (!file) return;
     setUploading(true);
     setMessage('');
+
+    // Validar tamaño (50MB max)
+    if (file.size > 50 * 1024 * 1024) {
+      setMessage('El archivo es demasiado grande (máximo 50MB)');
+      setUploading(false);
+      if (e.target) e.target.value = '';
+      return;
+    }
+
     try {
-      // Si es video, intentar subir al servidor/Supabase
-      if (file.type.startsWith('video/')) {
-        const fd = new FormData();
-        fd.append('file', file);
-        const res = await fetch('/api/upload', { method: 'POST', body: fd });
-        const data = await res.json();
-        if (res.ok && data.url) {
-          update('imageUrl', data.url);
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch('/api/upload', { method: 'POST', body: fd });
+      const data = await res.json();
+
+      if (res.ok && data.url) {
+        // Si es video, guardarlo en videoUrl; si es imagen, en imageUrl
+        if (file.type.startsWith('video/')) {
+          update('videoUrl', data.url);
+          update('type', 'video');
         } else {
-          setMessage(data.error || 'No se pudo subir el video (requiere Supabase configurado)');
+          update('imageUrl', data.url);
+          if (form.type === 'written') update('type', 'photo');
         }
       } else {
-        // Imagen: comprimir en el navegador y guardar como base64
-        // (funciona en cualquier host, incluso Vercel de solo lectura)
-        const compressed = await compressImage(file, 1200, 0.8);
-        update('imageUrl', compressed);
+        setMessage(data.error || 'Error al subir el archivo');
       }
-    } catch (err) {
-      setMessage('Error al procesar la imagen');
+    } catch {
+      setMessage('Error de conexión al subir');
     }
     setUploading(false);
-    // Limpiar input para poder subir la misma imagen otra vez
     if (e.target) e.target.value = '';
   };
 
@@ -293,10 +261,10 @@ export default function TestimonialForm({ initial, mode }: TestimonialFormProps)
 
         {/* Media */}
         <div className="bg-vital-card border border-white/[0.06] rounded-2xl p-5">
-          <label className="block text-vital-text-secondary text-xs font-medium mb-3 uppercase tracking-wider">Multimedia</label>
+          <label className="block text-vital-text-secondary text-xs font-medium mb-3 uppercase tracking-wider">Multimedia (imágenes y videos)</label>
 
           {/* Upload */}
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex flex-wrap items-center gap-3 mb-4">
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
@@ -304,38 +272,77 @@ export default function TestimonialForm({ initial, mode }: TestimonialFormProps)
               className="flex items-center gap-2 bg-vital-green/15 text-vital-green px-4 py-2.5 rounded-xl text-sm hover:bg-vital-green/25 transition-all disabled:opacity-50"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
-              {uploading ? 'Subiendo...' : 'Subir imagen'}
+              {uploading ? 'Subiendo...' : '📷 Subir imagen o video'}
             </button>
             <input ref={fileInputRef} type="file" accept="image/*,video/*" onChange={handleUpload} className="hidden" />
-            {form.imageUrl && (
-              <div className="flex items-center gap-2">
-                <img src={form.imageUrl} alt="preview" className="w-10 h-10 rounded-lg object-cover" />
-                <button type="button" onClick={() => update('imageUrl', '')} className="text-vital-text-muted hover:text-red-400 text-xs">Quitar</button>
-              </div>
+            {uploading && (
+              <span className="text-vital-green text-xs flex items-center gap-2">
+                <span className="inline-block w-3 h-3 border-2 border-vital-green/30 border-t-vital-green rounded-full animate-spin"></span>
+                Subiendo a la nube...
+              </span>
             )}
           </div>
 
-          {/* Image URL */}
-          <div className="mb-3">
-            <input
-              type="text"
-              value={form.imageUrl}
-              onChange={(e) => update('imageUrl', e.target.value)}
-              className="admin-input w-full"
-              placeholder="O pega una URL de imagen..."
-            />
-          </div>
+          {/* Preview de imagen */}
+          {form.imageUrl && !form.imageUrl.startsWith('data:') && (
+            <div className="mb-4">
+              <p className="text-vital-text-muted text-[10px] uppercase tracking-wider mb-2">Imagen</p>
+              <div className="flex items-center gap-3">
+                <img src={form.imageUrl} alt="preview" className="w-20 h-20 rounded-xl object-cover border border-white/10" />
+                <div className="flex-1 min-w-0">
+                  <input
+                    type="text"
+                    value={form.imageUrl}
+                    onChange={(e) => update('imageUrl', e.target.value)}
+                    className="admin-input w-full text-[10px]"
+                  />
+                </div>
+                <button type="button" onClick={() => update('imageUrl', '')} className="text-vital-text-muted hover:text-red-400 text-xs p-2">✕</button>
+              </div>
+            </div>
+          )}
 
-          {/* Video URL */}
-          <div>
-            <input
-              type="text"
-              value={form.videoUrl}
-              onChange={(e) => update('videoUrl', e.target.value)}
-              className="admin-input w-full"
-              placeholder="URL del video (YouTube, Vimeo, o subido)..."
-            />
-          </div>
+          {/* Preview de video */}
+          {form.videoUrl && (
+            <div className="mb-4">
+              <p className="text-vital-text-muted text-[10px] uppercase tracking-wider mb-2">Video</p>
+              <div className="flex items-center gap-3">
+                <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-[#10231a] to-[#0c1813] flex items-center justify-center border border-white/10">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="#10b981"><path d="M8 5v14l11-7z" /></svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <input
+                    type="text"
+                    value={form.videoUrl}
+                    onChange={(e) => update('videoUrl', e.target.value)}
+                    className="admin-input w-full text-[10px]"
+                    placeholder="URL del video..."
+                  />
+                </div>
+                <button type="button" onClick={() => update('videoUrl', '')} className="text-vital-text-muted hover:text-red-400 text-xs p-2">✕</button>
+              </div>
+            </div>
+          )}
+
+          {/* URLs manuales cuando no hay nada subido */}
+          {!form.imageUrl && !form.videoUrl && (
+            <div className="space-y-3">
+              <input
+                type="text"
+                value={form.imageUrl}
+                onChange={(e) => update('imageUrl', e.target.value)}
+                className="admin-input w-full"
+                placeholder="📷 URL de imagen (opcional)..."
+              />
+              <input
+                type="text"
+                value={form.videoUrl}
+                onChange={(e) => update('videoUrl', e.target.value)}
+                className="admin-input w-full"
+                placeholder="🎬 URL de video YouTube/Vimeo (opcional)..."
+              />
+            </div>
+          )}
         </div>
 
         {/* Featured */}

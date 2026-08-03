@@ -10,6 +10,18 @@ interface VideoModalProps {
   onClose: () => void;
 }
 
+// Detecta si una URL es de YouTube/Vimeo y devuelve el ID embed
+function getEmbedUrl(url: string): string | null {
+  if (!url) return null;
+  // YouTube
+  const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+  if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
+  // Vimeo
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+  return null;
+}
+
 export default function VideoModal({ testimonial, getLocalizedField, t, onClose }: VideoModalProps) {
   const initials = testimonial.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2);
 
@@ -32,6 +44,12 @@ export default function VideoModal({ testimonial, getLocalizedField, t, onClose 
   const locale = t('testimonial.client') === 'Client' ? 'en' : 'es';
   const tagIcons: Record<string, string> = { energy: '⚡', weight: '⚖️', wellness: '💛', sleep: '😴', immunity: '🛡️' };
 
+  // Determinar qué mostrar en el header
+  const videoEmbedUrl = getEmbedUrl(testimonial.videoUrl);
+  const isSupabaseVideo = testimonial.videoUrl && testimonial.videoUrl.includes('supabase.co') && testimonial.videoUrl.match(/\.(mp4|webm|ogg)$/i);
+  const isDirectVideo = testimonial.videoUrl && (testimonial.videoUrl.endsWith('.mp4') || testimonial.videoUrl.endsWith('.webm'));
+  const hasImage = testimonial.imageUrl && testimonial.imageUrl.length > 0;
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -49,7 +67,7 @@ export default function VideoModal({ testimonial, getLocalizedField, t, onClose 
         className="relative bg-vital-card border border-white/[0.08] rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
       >
         {/* Media header */}
-        <div className="relative h-64 md:h-72 rounded-t-3xl bg-gradient-to-br from-vital-green-deeper to-vital-green-dark flex items-center justify-center overflow-hidden">
+        <div className="relative rounded-t-3xl overflow-hidden bg-gradient-to-br from-vital-green-deeper to-vital-green-dark">
           {/* Close button */}
           <button
             onClick={onClose}
@@ -62,22 +80,40 @@ export default function VideoModal({ testimonial, getLocalizedField, t, onClose 
           </button>
 
           {/* Type badge */}
-          <span className="absolute top-4 left-4 bg-vital-gold text-[#1a1404] text-[10px] font-semibold px-3 py-1 rounded-full">
+          <span className="absolute top-4 left-4 z-10 bg-vital-gold text-[#1a1404] text-[10px] font-semibold px-3 py-1 rounded-full">
             {testimonial.type === 'video' ? '▶ VIDEO' : testimonial.type === 'photo' ? '📷 FOTO' : '📝 HISTORIA'}
           </span>
 
-          {/* Play button for video */}
-          {testimonial.type === 'video' && (
-            <button className="w-16 h-16 rounded-full bg-white/90 hover:bg-white flex items-center justify-center transition-transform hover:scale-110">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="#047857">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </button>
-          )}
-
-          {testimonial.type !== 'video' && (
-            <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-vital-gold/15 blur-[40px]" />
-          )}
+          {/* Contenido del header según tipo */}
+          <div className="h-64 md:h-72 flex items-center justify-center">
+            {/* Video embebido (YouTube/Vimeo) */}
+            {videoEmbedUrl && (
+              <iframe
+                src={videoEmbedUrl}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            )}
+            {/* Video directo (Supabase Storage o .mp4) */}
+            {(isSupabaseVideo || isDirectVideo) && (
+              <video
+                src={testimonial.videoUrl}
+                controls
+                autoPlay
+                className="w-full h-full object-cover"
+              />
+            )}
+            {/* Imagen */}
+            {hasImage && !videoEmbedUrl && !isSupabaseVideo && !isDirectVideo && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={testimonial.imageUrl} alt={testimonial.name} className="w-full h-full object-cover" />
+            )}
+            {/* Placeholder cuando no hay media */}
+            {!videoEmbedUrl && !isSupabaseVideo && !isDirectVideo && !hasImage && (
+              <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-vital-gold/15 blur-[40px]" />
+            )}
+          </div>
         </div>
 
         {/* Content */}

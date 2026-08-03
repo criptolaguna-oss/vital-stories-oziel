@@ -71,27 +71,44 @@ function TestimonialCard({ testimonial, getLocalizedField, t, onSelect, index }:
       >
         {/* Media preview */}
         <div className="relative h-44 bg-gradient-to-br from-[#1c2820] to-[#0f1611] flex items-center justify-center overflow-hidden">
-          {testimonial.type === 'video' && (
+          {/* Imagen real si existe */}
+          {testimonial.imageUrl && testimonial.imageUrl.length > 0 ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={testimonial.imageUrl}
+              alt={testimonial.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          ) : testimonial.type === 'video' ? (
             <div className="w-14 h-14 rounded-full bg-gradient-to-br from-vital-green to-vital-green-dark flex items-center justify-center group-hover:scale-110 transition-transform">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
                 <path d="M8 5v14l11-7z" />
               </svg>
             </div>
-          )}
-          {testimonial.type === 'photo' && (
+          ) : testimonial.type === 'photo' ? (
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2f4438" strokeWidth="1.5">
               <rect x="3" y="3" width="18" height="18" rx="2" />
               <circle cx="9" cy="9" r="2" />
               <path d="M21 15l-5-5L5 21" />
             </svg>
-          )}
-          {testimonial.type === 'written' && (
+          ) : (
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4a4530" strokeWidth="1.5">
               <line x1="4" y1="6" x2="20" y2="6" />
               <line x1="4" y1="10" x2="20" y2="10" />
               <line x1="4" y1="14" x2="16" y2="14" />
               <line x1="4" y1="18" x2="14" y2="18" />
             </svg>
+          )}
+
+          {/* Play overlay si es video */}
+          {testimonial.type === 'video' && testimonial.imageUrl && (
+            <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/20 transition-colors">
+              <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="#047857">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+            </div>
           )}
 
           {/* Type badge */}
